@@ -17,8 +17,8 @@ import { NextRequest, NextResponse } from "next/server";
                 email:user?.primaryEmailAddress?.emailAddress,
                 credits:10,
                 //@ts-ignore
-            }).returning(); 
-            return NextResponse.json(result);
+            }).returning({usersTable})
+            return NextResponse.json(result[0]?.usersTable);
             
         }
         return NextResponse.json(users[0]);
