@@ -27,7 +27,7 @@ function AddNewSessionDialog() {
     <div>
         <h2>Add symptoms or Any Other Details</h2>
         <Textarea placeholder='ADD detail here..' className='h-[250px] mt-1'
-            onChange ={(e)=>setNote(e.target.value)} /> 
+            onChange ={(e)=>setNote(e.target.value)} />     
     </div> 
       </DialogDescription>
     </DialogHeader>
