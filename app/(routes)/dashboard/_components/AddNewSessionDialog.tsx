@@ -12,9 +12,23 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { ArrowBigRight } from 'lucide-react'
+import { ArrowBigRight, ArrowRight, Loader2 } from 'lucide-react'
+import axios from 'axios'
+import DoctorAgentCard, { doctorAgent } from './DoctorAgentCard'
+import SuggestedDoctorCard from './SuggestedDoctorCard'
+
 function AddNewSessionDialog() {
     const [note,setNote] = useState<string>();
+ const[loading,setLoading] =  useState(false);
+ const [suggestedDoctors,setSuggestedDoctors] = useState<doctorAgent[]>();
+const OnClickNext = async() =>{
+    setLoading(true);
+    const result = await axios.post('/api/suggest-doctors',{notes:note});
+    console.log(result.data);
+    setSuggestedDoctors(result.data);
+    setLoading(false);
+}
+
   return (
    <Dialog>
   <DialogTrigger>
@@ -24,11 +38,16 @@ function AddNewSessionDialog() {
     <DialogHeader>
       <DialogTitle>Add basic Details</DialogTitle>
       <DialogDescription asChild>
-    <div>
+    {!suggestedDoctors ? <div>
         <h2>Add symptoms or Any Other Details</h2>
-        <Textarea placeholder='ADD detail here..' className='h-[250px] mt-1'
+        <Textarea placeholder='ADD detail here..' className='h-[200px] mt-1'
             onChange ={(e)=>setNote(e.target.value)} />     
-    </div> 
+    </div>:<div className='grid grid-cols-2 gap-5'>
+        {/* suggested doctors */}
+        {suggestedDoctors.map((doctor,index)=>(
+            <SuggestedDoctorCard doctorAgent={doctor} key ={index}/>
+        ))}
+    </div>}
       </DialogDescription>
     </DialogHeader>
     <DialogFooter>
@@ -36,7 +55,12 @@ function AddNewSessionDialog() {
  <Button variant ={'outline'}>Cancel</Button>
         </DialogClose>
        
-        <Button disabled={!note}>Next <ArrowBigRight/></Button>
+        {!suggestedDoctors ? <Button disabled={!note 
+            || loading
+        } onClick={()=>OnClickNext()}>
+
+            Next {loading ? <Loader2 className='animate-spin' />:<ArrowRight/>}</Button>
+        :<Button>Start Consultation</Button>}
     </DialogFooter>
   </DialogContent>
 </Dialog>

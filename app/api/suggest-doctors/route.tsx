@@ -12,8 +12,11 @@ export async function POST(req:NextRequest){
       { role: "user", content: "User Notes/Symptoms:"+notes+",Depends on user notes and symptoms,Please suggest list of doctoes, Return object in json only" }
     ],
   });
-  const rawResp = completion.choices[0].message;
-  return NextResponse.json(rawResp);
+  const rawResp = completion.choices[0].message||'';
+  //@ts-ignore
+  const Resp = rawResp.content.trim().replace('```json','').replace('```','');
+  const JSONResp =JSON.parse(Resp);
+  return NextResponse.json(JSONResp);
     }catch(e){
        return NextResponse.json(e);
     }
