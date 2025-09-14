@@ -22,12 +22,12 @@ function AddNewSessionDialog() {
     const [note,setNote] = useState<string>();
  const[loading,setLoading] =  useState(false);
  const [suggestedDoctors,setSuggestedDoctors] = useState<doctorAgent[]>();
- const [selectedDoctor,setSelectedDoctor] = useState<doctorAgent>();
+ const [selectedDoctor,setSelectedDoctor] = useState<doctorAgent | null>();
 const OnClickNext = async() =>{
     setLoading(true);
     const result = await axios.post('/api/suggest-doctors',{notes:note});
     console.log(result.data);
-    setSuggestedDoctors(result.data);
+    setSuggestedDoctors(result.data.doctors);
     setLoading(false);
 }
 
@@ -53,7 +53,7 @@ setLoading(false);
 
   return (
    <Dialog>
-  <DialogTrigger>
+  <DialogTrigger asChild>
       <Button className='mt-3 '>+ Start a Consultation</Button>
   </DialogTrigger>
   <DialogContent>
@@ -79,7 +79,7 @@ setLoading(false);
       </DialogDescription>
     </DialogHeader>
     <DialogFooter>
-        <DialogClose>
+        <DialogClose asChild>
  <Button variant ={'outline'}>Cancel</Button>
         </DialogClose>
        

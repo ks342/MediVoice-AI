@@ -8,7 +8,7 @@ function Dashboard() {
   return (
     <div>
       <div className='flex justify-between items-center'>
- <h2 font-bold text-2xl >My Dashboard</h2>  
+ <h2 className=' font-bold text-2xl '>My Dashboard</h2>  
  <AddNewSessionDialog />
       </div>
      

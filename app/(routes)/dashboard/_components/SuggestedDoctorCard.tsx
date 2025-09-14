@@ -10,7 +10,7 @@ type props={
 }
 function SuggestedDoctorCard({doctorAgent,setSelectedDoctor,selectedDoctor}:props) {
   return (
-    <div className={`flex flex-col items-center  border rounded-2xl shadow p-5 hover:border-blue-500 cursor-pointer ${selectedDoctor.id == doctorAgent.id && 'border-blue-500'}`} onClick={()=>setSelectedDoctor(doctorAgent)} >
+    <div className={`flex flex-col items-center  border rounded-2xl shadow p-5 hover:border-blue-500 cursor-pointer ${selectedDoctor?.id == doctorAgent.id && 'border-blue-500'}`} onClick={()=>setSelectedDoctor(doctorAgent)} >
         <Image src ={doctorAgent.image}
         alt = {doctorAgent.specialist}
         height={70}
