@@ -7,7 +7,6 @@ import { Circle, PhoneCall, PhoneOff } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import Vapi from '@vapi-ai/web';
-import { log } from 'console';
  
 type sessionDetail={
   id:number,
@@ -17,12 +16,20 @@ type sessionDetail={
   selectedDoctor: doctorAgent,
   createdOn:string,
 }
+
+type messages = {
+  role:string,
+  text:string,
+}
 function MedicalVoiceAgent() {
   const {sessionId} = useParams();
   const [sessionDetail,setSessionDetail] = useState<sessionDetail>();
   const[callStarted,setCallStarted] = useState(false);
   const [vapiInstance,setVapiInstance] = useState<any>();
-  
+  const [currentRole,setCurrentRole] = useState<string|null>();
+ const[liveTranscript,setLiveTranscript] = useState<string>(); 
+const [messages,setMessages] = useState<messages[]>([]);
+
 
   useEffect(()=>{
     sessionId&&GetSessionDetails();
@@ -47,9 +54,31 @@ vapi.on('call-end', () => {
   console.log('Call ended')});
 vapi.on('message', (message) => {
   if (message.type === 'transcript') {
+     const {role,transcriptType,transcript} = message;
     console.log(`${message.role}: ${message.transcript}`);
+    if(transcriptType == 'partial'){
+    setLiveTranscript(transcript);
+    setCurrentRole(role);
+    }
+    else if (transcriptType == 'final'){
+      //FINAL TRANSCRIPT
+      setMessages((prev:any)=>[...prev,{role:role,text:transcript}]);
+      setLiveTranscript("");
+      setCurrentRole(null);
+    }
   }
 });
+
+
+  vapiInstance.on('speech-start', () => {
+      console.log('Assistant started speaking');
+       setCurrentRole('assistant');
+    });
+    vapiInstance.on('speech-end', () => {
+      console.log('Assistant stopped speaking');
+       setCurrentRole('user');
+    });
+
    }
  const endCall = () => {
   if(!vapiInstance) return;
@@ -77,9 +106,14 @@ vapi.on('message', (message) => {
      className='h-[100px] w-[100px] object-cover rounded-full '/> 
      <h2 className='mt-2 text-lg'>{sessionDetail?.selectedDoctor?.specialist}  </h2>
      <p className='text-sm text-gray-400'>AI Medical Voice Agent</p>
-        <div className='mt-32'>
-          <h2 className='text-gray-400 '>Assistant Msg</h2>
-          <h2 className='text-lg'>User Msg</h2>
+        <div className='mt-32 overflow-y-auto flex  flex-col items-center px-10 md:px-28 lg:px-52 xl:px-72'>
+          {messages?.slice(-4).map((msg:messages,index)=>(
+          
+          <h2 className='text-gray-400 p-2' key ={index}> {msg.role}:{msg.text}</h2>
+              
+        
+          ))}
+          {liveTranscript&&liveTranscript?.length>0 && <h2 className='text-lg'>{currentRole}:{liveTranscript}</h2> }
           </div>
   { !callStarted? <Button className='mt-20' onClick={StartCall}><PhoneCall/> Start Call</Button>
   :<Button variant={'destructive'} onClick={endCall}> <PhoneOff />Disconnect</Button>
