@@ -6,7 +6,7 @@ import { doctorAgent } from '../../_components/DoctorAgentCard';
 import { Circle, PhoneCall, PhoneOff } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import Vapi, { VapiClient } from '@vapi-ai/web';
+import Vapi from '@vapi-ai/web';
  
  type sessionDetail={
    id:number,
@@ -32,7 +32,7 @@ import Vapi, { VapiClient } from '@vapi-ai/web';
    const {sessionId} = useParams();
    const [sessionDetail,setSessionDetail] = useState<sessionDetail>();
    const[callStarted,setCallStarted] = useState(false);
-   const [vapiInstance,setVapiInstance] = useState<VapiClient | null>(null);
+   const [vapiInstance,setVapiInstance] = useState<unknown | null>(null);
    const [currentRole,setCurrentRole] = useState<string|null>();
   const[liveTranscript,setLiveTranscript] = useState<string>(); 
  const [messages,setMessages] = useState<messages[]>([]);
@@ -93,11 +93,11 @@ import Vapi, { VapiClient } from '@vapi-ai/web';
   const endCall = () => {
    if(!vapiInstance) return;
    // stop the call
-       vapiInstance.stop();
+       (vapiInstance as any).stop();
        //optionally remove listeners(good memory management)
-       vapiInstance.off('call-start');
-       vapiInstance.off('call-end');
-       vapiInstance.off('message');
+       (vapiInstance as any).off('call-start');
+       (vapiInstance as any).off('call-end');
+       (vapiInstance as any).off('message');
      // reset call state
  
      setCallStarted(false);
