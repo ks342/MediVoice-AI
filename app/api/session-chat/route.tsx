@@ -16,8 +16,8 @@ export async function POST(req:NextRequest){
     notes:notes,
     selectedDoctor:selectedDoctor,
     createdOn:(new Date()).toString(),
-   }).returning({SessionChatTable})
-   return  NextResponse.json(result[0]?.SessionChatTable);
+   }).returning({ sessionId: SessionChatTable.sessionId });
+   return  NextResponse.json({ sessionId: result[0]?.sessionId });
     }catch(e){
        return  NextResponse.json(e)
     }
@@ -30,7 +30,7 @@ export async function POST(req:NextRequest){
     await  currentUser();
 
     const result = await db.select().from
-    (SessionChatTable).where(eq(SessionChatTable.sessionId,sessionId));
+    (SessionChatTable).where(eq(SessionChatTable.sessionId,sessionId||''));
 
     return NextResponse.json(result[0]);
  }
