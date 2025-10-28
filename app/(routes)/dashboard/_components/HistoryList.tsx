@@ -1,10 +1,10 @@
 "use client";
 import Image from 'next/image';
-import React, { useState } from 'react'
+import React from 'react'
 import AddNewSessionDialog from './AddNewSessionDialog';
 
 function HistoryList(){
-    const[historyList,setHistoryList]  =useState<any[]>([]);
+    const historyList: never[] = [];
   return (
     <div className='mt-10'>
         {historyList.length == 0?

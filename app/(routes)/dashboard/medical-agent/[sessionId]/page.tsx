@@ -6,7 +6,7 @@ import { doctorAgent } from '../../_components/DoctorAgentCard';
 import { Circle, PhoneCall, PhoneOff } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import Vapi from '@vapi-ai/web';
+import Vapi, { VapiClient } from '@vapi-ai/web';
  
  type sessionDetail={
    id:number,
@@ -32,7 +32,7 @@ import Vapi from '@vapi-ai/web';
    const {sessionId} = useParams();
    const [sessionDetail,setSessionDetail] = useState<sessionDetail>();
    const[callStarted,setCallStarted] = useState(false);
-   const [vapiInstance,setVapiInstance] = useState<any>();
+   const [vapiInstance,setVapiInstance] = useState<VapiClient | null>(null);
    const [currentRole,setCurrentRole] = useState<string|null>();
   const[liveTranscript,setLiveTranscript] = useState<string>(); 
  const [messages,setMessages] = useState<messages[]>([]);
@@ -78,11 +78,11 @@ import Vapi from '@vapi-ai/web';
  });
  
  
-   vapiInstance?.on('speech-start', () => {
+   vapi.on('speech-start', () => {
        console.log('Assistant started speaking');
         setCurrentRole('assistant');
      });
-     vapiInstance?.on('speech-end', () => {
+     vapi.on('speech-end', () => {
        console.log('Assistant stopped speaking');
         setCurrentRole('user');
      });
