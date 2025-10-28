@@ -9,7 +9,7 @@ import {
   SignedOut,
   UserButton,
 } from '@clerk/nextjs'
-import Provider from './provider'
+import Provider from './Provider'
 
 
 const geistSans = Geist({
