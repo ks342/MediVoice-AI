@@ -14,8 +14,13 @@ import { NextRequest, NextResponse } from "next/server";
                 name:user?.fullName||'User',
                 email:user?.primaryEmailAddress?.emailAddress||'',
                 credits:10,
-            }).returning({usersTable})
-            return NextResponse.json(result[0]?.usersTable);
+            }).returning({
+              id: usersTable.id,
+              name: usersTable.name,
+              email: usersTable.email,
+              credits: usersTable.credits,
+            })
+            return NextResponse.json(result[0]);
             
         }
         return NextResponse.json(users[0]);
