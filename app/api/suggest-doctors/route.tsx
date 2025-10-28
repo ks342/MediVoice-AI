@@ -17,13 +17,13 @@ export async function POST(req:NextRequest){
       { role: "user", content: "User Notes/Symptoms:"+notes+", Based on the user notes and symptoms, suggest a list of relevant AI doctors. Return JSON only with a 'doctors' array." }
     ],
   });
-  const rawResp = completion.choices[0].message||'';
-  //@ts-ignore
+  const rawResp = completion.choices[0].message||'' as any;
+  // @ts-expect-error content can be string
   const Resp = rawResp.content.trim().replace('```json','').replace('```','');
   const JSONResp =JSON.parse(Resp);
   return NextResponse.json(JSONResp);
-    }catch(e:any){
-       const message = e?.message || 'Unknown error';
-       return NextResponse.json({ error: message }, { status: e?.status || 500 });
+    }catch(e){
+       const message = (e as Error)?.message || 'Unknown error';
+       return NextResponse.json({ error: message }, { status: 500 });
     }
 }

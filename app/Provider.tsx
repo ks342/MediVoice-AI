@@ -5,18 +5,18 @@ import { useUser } from '@clerk/nextjs';
 import { UserDetailContext } from '@/context/UserDetailContext';
 
  export type UsersDetail = {
-    name:String,
-    email:String,
+    name:string,
+    email:string,
     credits:number
 }
 
 function Provider({
  children,
 }: Readonly<{
-  children: React.ReactNode;
+ children: React.ReactNode;
 }>){
        const {user} = useUser();
-       const [userDetail,setUserDetail] =useState<any>()
+       const [userDetail,setUserDetail] =useState<UsersDetail | null>(null)
        useEffect(()=>{
         user && CreateNewUser();
        },[user])

@@ -5,8 +5,8 @@ import Image from 'next/image'
 
 type props={
     doctorAgent :doctorAgent
-    setSelectedDoctor:any
-     selectedDoctor:doctorAgent
+    setSelectedDoctor: (doctor: doctorAgent)=>void
+     selectedDoctor:doctorAgent | null
 }
 function SuggestedDoctorCard({doctorAgent,setSelectedDoctor,selectedDoctor}:props) {
   return (

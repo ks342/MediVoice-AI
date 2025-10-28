@@ -12,9 +12,9 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { ArrowBigRight, ArrowRight, Loader2 } from 'lucide-react'
+import { ArrowRight, Loader2 } from 'lucide-react'
 import axios from 'axios'
-import DoctorAgentCard, { doctorAgent } from './DoctorAgentCard'
+import { doctorAgent } from './DoctorAgentCard'
 import SuggestedDoctorCard from './SuggestedDoctorCard'
 import { useRouter } from 'next/navigation'
 
@@ -87,7 +87,6 @@ const onStartConsultation= async()=>{
         {/* suggested doctors */}
         {suggestedDoctors && Array.isArray(suggestedDoctors) && suggestedDoctors.map((doctor,index)=>(
             <SuggestedDoctorCard doctorAgent={doctor} key ={index} setSelectedDoctor={()=>setSelectedDoctor(doctor)}
-            //@ts-ignore
             selectedDoctor = {selectedDoctor}/>
         ))}
     </div>

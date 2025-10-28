@@ -62,10 +62,10 @@ export async function POST(req:NextRequest){
           });
           
           const rawResp = completion.choices[0].message||'';
-          //@ts-ignore
+          // @ts-expect-error content can be string
           const Resp = rawResp.content.trim().replace('```json','').replace('```','');
           
-          let JSONResp;
+          let JSONResp: Record<string, unknown>;
           try {
             JSONResp = JSON.parse(Resp);
           } catch (parseError) {
@@ -74,15 +74,14 @@ export async function POST(req:NextRequest){
             return NextResponse.json({ error: 'Failed to parse AI response' }, { status: 500 });
           }
 
-          // save to db
-          const result = await db.update(SessionChatTable).set({
+          await db.update(SessionChatTable).set({
             report:JSONResp
           }).where(eq(SessionChatTable.sessionId,sessionId))
           
           console.log('Report saved to database');
           return NextResponse.json(JSONResp);
-    }catch(e:any){
-        const message = e?.message || 'Unknown error';
-        return NextResponse.json({ error: message }, { status: e?.status || 500 });
+    }catch(e){
+        const message = (e as Error)?.message || 'Unknown error';
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }            
