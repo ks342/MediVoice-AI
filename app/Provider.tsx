@@ -18,7 +18,8 @@ function Provider({
        const {user} = useUser();
        const [userDetail,setUserDetail] =useState<UsersDetail | null>(null)
        useEffect(()=>{
-        user && CreateNewUser();
+        if(!user) return;
+        CreateNewUser();
        },[user])
 
     const CreateNewUser=async()=>{

@@ -17,9 +17,9 @@ export async function POST(req:NextRequest){
       { role: "user", content: "User Notes/Symptoms:"+notes+", Based on the user notes and symptoms, suggest a list of relevant AI doctors. Return JSON only with a 'doctors' array." }
     ],
   });
-  const rawResp = completion.choices[0].message||'' as any;
-  // @ts-expect-error content can be string
-  const Resp = rawResp.content.trim().replace('```json','').replace('```','');
+  const rawMsg = completion.choices[0].message;
+  const content = (typeof rawMsg?.content === 'string' ? rawMsg.content : '') as string;
+  const Resp = content.trim().replace('```json','').replace('```','');
   const JSONResp =JSON.parse(Resp);
   return NextResponse.json(JSONResp);
     }catch(e){

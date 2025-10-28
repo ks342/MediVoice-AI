@@ -46,7 +46,9 @@ import Vapi, { VapiClient } from '@vapi-ai/web';
    },[sessionId])
  
    useEffect(()=>{
-     sessionId&&GetSessionDetails();
+    if (sessionId) {
+      GetSessionDetails();
+    }
    },[sessionId, GetSessionDetails])
  
     const StartCall=()=>{
