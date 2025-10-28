@@ -15,7 +15,7 @@ function SuggestedDoctorCard({doctorAgent,setSelectedDoctor,selectedDoctor}:prop
         alt = {doctorAgent?.specialist}
         height={70}
         width ={70} 
-        className='w-[50px] h-[50px] rounded-4xl object-cover'/>
+        className='w-[50px] h-[50px] rounded-full object-cover'/>
         <h2 className='font-bold text-sm text-center'>{doctorAgent?.specialist}</h2>
         <p className='text-xs text-center line-clamp-2'>{doctorAgent?.description}</p>
     </div>

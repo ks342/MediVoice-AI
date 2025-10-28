@@ -68,40 +68,42 @@ export  default function HeroSectionOne() {
           }}
           className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4"
         >
-          <button className="w-60 transform rounded-lg bg-black px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200">
-            Explore Now
-          </button>
-          <button className="w-60 transform rounded-lg border border-gray-300 bg-white px-6 py-2 font-medium text-black transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-100 dark:border-gray-700 dark:bg-black dark:text-white dark:hover:bg-gray-900">
-            Contact Support
-          </button>
+          <Link href={'/dashboard'}>
+            <button className="w-60 transform rounded-lg bg-black px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200">
+              Get Started
+            </button>
+          </Link>
+          <Link href={'/dashboard'}>
+            <button className="w-60 transform rounded-lg border border-gray-300 bg-white px-6 py-2 font-medium text-black transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-100 dark:border-gray-700 dark:bg-black dark:text-white dark:hover:bg-gray-900">
+              Explore Doctors
+            </button>
+          </Link>
         </motion.div>
-        <Link href={'/sign-in'}>
         <motion.div
-          initial={{
-            opacity: 0,
-            y: 10,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            duration: 0.3,
-            delay: 1.2,
-          }}
-          className="relative z-10 mt-20 rounded-3xl border border-neutral-200 bg-neutral-100 p-4 shadow-md dark:border-neutral-800 dark:bg-neutral-900"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 1.2 }}
+          className="relative z-10 mt-16"
         >
-          <div className="w-full overflow-hidden rounded-xl border border-gray-300 dark:border-gray-700">
-            <img
-              src="https://assets.aceternity.com/pro/aceternity-landing.webp"
-              alt="Landing page preview"
-              className="aspect-[16/9] h-auto w-full object-cover"
-              height={1000}
-              width={1000}
-            />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+            <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 p-4 text-center">
+              <h3 className="text-sm font-semibold">HIPAA‑ready</h3>
+              <p className="text-xs text-neutral-500">Privacy‑first processing</p>
+            </div>
+            <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 p-4 text-center">
+              <h3 className="text-sm font-semibold">End‑to‑end encryption</h3>
+              <p className="text-xs text-neutral-500">Data in transit & at rest</p>
+            </div>
+            <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 p-4 text-center">
+              <h3 className="text-sm font-semibold">99.9% uptime</h3>
+              <p className="text-xs text-neutral-500">Reliable voice sessions</p>
+            </div>
+            <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 p-4 text-center">
+              <h3 className="text-sm font-semibold">100+ clinics</h3>
+              <p className="text-xs text-neutral-500">Optimized for teams</p>
+            </div>
           </div>
         </motion.div>
-        </Link>
       </div>
       <FeatureBentoGrid />
     </div>
@@ -114,16 +116,22 @@ const Navbar = () => {
     <nav className="flex w-full  justify-between border-t border-b border-neutral-200 px-4 py-4 dark:border-neutral-800">
       <div className="flex items-center gap-2">
         <div className="size-7 rounded-full bg-gradient-to-br from-violet-500 to-pink-500" />
-        <h1 className="text-base font-bold md:text-2xl">Aceternity UI</h1>
+        <h1 className="text-base font-bold md:text-2xl">MediVoice AI</h1>
       </div>
-      {!user ?<button className="w-24 transform rounded-lg bg-black px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 md:w-32 dark:bg-white dark:text-black dark:hover:bg-gray-200">
-        Login
-      </button>:
-      <div className="flex gap-5 items-center">
-        <UserButton/>
-        <Button>Dashboard</Button>
-      </div>
-}
+      {!user ? (
+        <Link href={'/sign-in'}>
+          <button className="w-24 transform rounded-lg bg-black px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 md:w-32 dark:bg-white dark:text-black dark:hover:bg-gray-200">
+            Login
+          </button>
+        </Link>
+      ) : (
+        <div className="flex gap-5 items-center">
+          <UserButton/>
+          <Link href={'/dashboard'}>
+            <Button>Dashboard</Button>
+          </Link>
+        </div>
+      )}
     </nav>
   );
 };

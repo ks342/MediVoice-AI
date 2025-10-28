@@ -27,28 +27,41 @@ function AddNewSessionDialog() {
  const [selectedDoctor,setSelectedDoctor] = useState<doctorAgent | null>();
  const router = useRouter();
 const OnClickNext = async() =>{
-    setLoading(true);
-    const result = await axios.post('/api/suggest-doctors',{notes:note});
-    console.log(result.data);
-    setSuggestedDoctors(result.data.doctors);
-    setLoading(false);
+    try{
+      setLoading(true);
+      const result = await axios.post('/api/suggest-doctors',{notes:note});
+      console.log(result.data);
+      setSuggestedDoctors(result.data.doctors);
+    }catch(err){
+      console.error('Failed to suggest doctors', err);
+      alert('Failed to suggest doctors. Please try again.');
+    }finally{
+      setLoading(false);
+    }
 }
 
 const onStartConsultation= async()=>{
-  setLoading(true);
-  // save all Info to database
-const result = await axios.post('/api/session-chat',{
-  notes:note,
-  selectedDoctor:selectedDoctor
-});
-console.log(result.data);
-
-if(result.data?.sessionId){
-  console.log(result.data.sessionId);
-  // route new conversation screen
-  router.push(`/dashboard/medical-agent/${result.data.sessionId}`);
-}
-setLoading(false);
+  if(!selectedDoctor){
+    return;
+  }
+  try{
+    setLoading(true);
+    const result = await axios.post('/api/session-chat',{
+      notes:note,
+      selectedDoctor:selectedDoctor
+    });
+    console.log(result.data);
+    if(result.data?.sessionId){
+      router.push(`/dashboard/medical-agent/${result.data.sessionId}`);
+    } else {
+      alert('Unable to create session. Please try again.');
+    }
+  }catch(err){
+    console.error('Failed to start consultation', err);
+    alert('AI endpoint is not responding. Please try again in a moment.');
+  }finally{
+    setLoading(false);
+  }
 }
 
 

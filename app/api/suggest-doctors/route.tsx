@@ -5,11 +5,16 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req:NextRequest){
     const{notes } = await req.json();
     try{
+  // Guard: API key must exist
+  if(!process.env.OPEN_ROUTER_API_KEY){
+    return NextResponse.json({error:'OPEN_ROUTER_API_KEY is not set'}, { status: 500 });
+  }
+  const model = process.env.OPENROUTER_MODEL || 'openai/gpt-4o-mini';
   const completion = await openai.chat.completions.create({
-    model: "meta-llama/llama-3.1-405b-instruct:free",
+    model,
     messages: [
         {role:'system',content:JSON.stringify(AIDoctorAgents)},
-      { role: "user", content: "User Notes/Symptoms:"+notes+",Depends on user notes and symptoms,Please suggest list of doctoes, Return object in json only" }
+      { role: "user", content: "User Notes/Symptoms:"+notes+", Based on the user notes and symptoms, suggest a list of relevant AI doctors. Return JSON only with a 'doctors' array." }
     ],
   });
   const rawResp = completion.choices[0].message||'';
@@ -17,7 +22,8 @@ export async function POST(req:NextRequest){
   const Resp = rawResp.content.trim().replace('```json','').replace('```','');
   const JSONResp =JSON.parse(Resp);
   return NextResponse.json(JSONResp);
-    }catch(e){
-       return NextResponse.json(e);
+    }catch(e:any){
+       const message = e?.message || 'Unknown error';
+       return NextResponse.json({ error: message }, { status: e?.status || 500 });
     }
 }
