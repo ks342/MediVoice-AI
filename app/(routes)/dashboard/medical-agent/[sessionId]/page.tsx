@@ -28,7 +28,11 @@ import Vapi from '@vapi-ai/web';
    role:string,
    text:string,
  }
- function MedicalVoiceAgent() {
+ type MinimalVapi = {
+  stop: () => void;
+  off: (event: string) => void;
+}
+function MedicalVoiceAgent() {
    const {sessionId} = useParams();
    const [sessionDetail,setSessionDetail] = useState<sessionDetail>();
    const[callStarted,setCallStarted] = useState(false);
@@ -46,9 +50,9 @@ import Vapi from '@vapi-ai/web';
    },[sessionId])
  
    useEffect(()=>{
-    if (sessionId) {
-      GetSessionDetails();
-    }
+     if (sessionId) {
+       GetSessionDetails();
+     }
    },[sessionId, GetSessionDetails])
  
     const StartCall=()=>{
@@ -92,12 +96,13 @@ import Vapi from '@vapi-ai/web';
     }
   const endCall = () => {
    if(!vapiInstance) return;
+   const v = vapiInstance as MinimalVapi;
    // stop the call
-       (vapiInstance as any).stop();
+      v.stop();
        //optionally remove listeners(good memory management)
-       (vapiInstance as any).off('call-start');
-       (vapiInstance as any).off('call-end');
-       (vapiInstance as any).off('message');
+      v.off('call-start');
+      v.off('call-end');
+      v.off('message');
      // reset call state
  
      setCallStarted(false);
